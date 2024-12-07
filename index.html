@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Village Grocer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-5">Welcome to The Village Grocer</h1>
+        <div class="row justify-content-center mt-4">
+            <a href="{{ url_for('add_product') }}" class="btn btn-primary mx-2">Add Product</a>
+            <a href="{{ url_for('view_products') }}" class="btn btn-secondary mx-2">View Products</a>
+            <a href="{{ url_for('report') }}" class="btn btn-warning mx-2">Low Stock Report</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low Stock PDF Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script>
+        async function generatePDF() {
+            try {
+                // Fetch the data from the Flask API
+                const response = await fetch('/low_stock_api');
+                if (!response.ok) throw new Error('Failed to fetch data');
+                const lowStockData = await response.json();
+
+                // Generate the PDF
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+
+                // Add the title
+                doc.setFontSize(18);
+                doc.text('Low Stock Products Report', 105, 20, { align: 'center' });
+
+                // Table header
+                let startY = 40;
+                doc.setFontSize(12);
+                doc.text('Name', 20, startY);
+                doc.text('Category', 60, startY);
+                doc.text('Quantity', 120, startY);
+                doc.text('Expiry Date', 160, startY);
+
+                // Table rows
+                let y = startY + 10;
+                lowStockData.forEach((product) => {
+                    doc.text(product.name, 20, y);
+                    doc.text(product.category, 60, y);
+                    doc.text(String(product.quantity), 120, y);
+                    doc.text(product.expiry_date, 160, y);
+                    y += 10;
+                });
+
+                // Save the PDF
+                doc.save('Low_Stock_Report.pdf');
+            } catch (error) {
+                console.error(error);
+                alert('An error occurred while generating the PDF.');
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Low Stock Products</h1>
+    <button onclick="generatePDF()">Download PDF Report</button>
+</body>
+</html>
